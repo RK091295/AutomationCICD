@@ -22,6 +22,8 @@ public class StandAloneTest {
 	public static void main(String[] args) {
 
 	    WebDriverManager.chromedriver().setup();
+	    
+	    //new code added
 
 	    WebDriver driver = new ChromeDriver();
 	    driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
