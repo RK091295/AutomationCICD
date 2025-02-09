@@ -42,7 +42,7 @@ public class StandAloneTest {
 	    List<WebElement> products = driver.findElements(By.cssSelector(".mb-3"));
 
 	    WebElement prod = products.stream().filter(product ->
-	        product.findElement(By.cssSelector("b")).getText().equals("LG Refrigerator")).findFirst().orElse(null);
+	        product.findElement(By.cssSelector("b")).getText().equals("LG REFRIGERATOR")).findFirst().orElse(null);
 	    prod.findElement(By.cssSelector(".card-body button:last-of-type")).click();
 
 	    wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("#toast-container")));
