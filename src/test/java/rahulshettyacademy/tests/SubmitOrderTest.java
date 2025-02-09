@@ -33,7 +33,7 @@ import rahulshettyacademy.pageobjects.OrderPage;
 import rahulshettyacademy.pageobjects.ProductCatalogue;
 
 public class SubmitOrderTest extends BaseTest{
-	String productName = "IPHONE 13 PRO";
+	String productName = "LG REFRIGERATOR";
 
 	@Test(dataProvider="getData",groups= {"Purchase"})
 	public void submitOrder(HashMap<String,String> input) throws IOException, InterruptedException
