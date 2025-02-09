@@ -32,12 +32,12 @@ public class ErrorValidationsTest extends BaseTest {
 	public void ProductErrorValidation() throws IOException, InterruptedException
 	{
 
-		String productName = "IPHONE 13 PRO";
+		String productName = "BANARSI SAREE";
 		ProductCatalogue productCatalogue = landingPage.loginApplication("rahulshetty@gmail.com", "Iamking@000");
 		List<WebElement> products = productCatalogue.getProductList();
 		productCatalogue.addProductToCart(productName);
 		CartPage cartPage = productCatalogue.goToCartPage();
-		Boolean match = cartPage.VerifyProductDisplay("IPHONE 13 PRO");
+		Boolean match = cartPage.VerifyProductDisplay("BANARSI SAREE 3");
 		Assert.assertFalse(match);
 		
 	
