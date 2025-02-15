@@ -60,7 +60,7 @@ public class SubmitOrderTest extends BaseTest{
 	public void OrderHistoryTest()
 	{
 		//"ZARA COAT 3";
-		ProductCatalogue productCatalogue = landingPage.loginApplication("anshika@gmail.com", "Iamking@000");
+		ProductCatalogue productCatalogue = landingPage.loginApplication("sherlockholmes@gmail.com", "Sherl@ckHo1mes");
 		OrderPage ordersPage = productCatalogue.goToOrdersPage();
 		Assert.assertTrue(ordersPage.VerifyOrderDisplay(productName));
 		
@@ -102,7 +102,7 @@ public class SubmitOrderTest extends BaseTest{
 	
 	//Updated Changes on 15-02-2025 0707
 	//Updated Changes on 15-02-2025 0720
-	
+	//Updated Changes on 15-02-2025 0728
 	
 	
 	
