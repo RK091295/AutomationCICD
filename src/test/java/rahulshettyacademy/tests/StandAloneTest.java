@@ -42,7 +42,7 @@ public class StandAloneTest {
 	    List<WebElement> products = driver.findElements(By.cssSelector(".mb-3"));
 
 	    WebElement prod = products.stream().filter(product ->
-	        product.findElement(By.cssSelector("b")).getText().equals("LG REFRIGERATOR")).findFirst().orElse(null);
+	        product.findElement(By.cssSelector("b")).getText().equals("IPHONE 13 PRO")).findFirst().orElse(null);
 	    prod.findElement(By.cssSelector(".card-body button:last-of-type")).click();
 
 	    wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("#toast-container")));
@@ -67,5 +67,6 @@ public class StandAloneTest {
 	    
 	    // some changes 09-02-2025
 	    //Updated Changes on 15-02-2025 0651
+	    //Updated Changes on 15-02-2025 0700
 	}
 }
