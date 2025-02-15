@@ -37,7 +37,7 @@ public class ErrorValidationsTest extends BaseTest {
 		List<WebElement> products = productCatalogue.getProductList();
 		productCatalogue.addProductToCart(productName);
 		CartPage cartPage = productCatalogue.goToCartPage();
-		Boolean match = cartPage.VerifyProductDisplay("ADIDAS ORIGINAL");
+		Boolean match = cartPage.VerifyProductDisplay("ADIDAS ORIGINAL1");
 		Assert.assertFalse(match);
 		
 	
