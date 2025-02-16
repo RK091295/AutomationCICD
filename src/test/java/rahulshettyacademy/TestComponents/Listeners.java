@@ -1,67 +1,83 @@
 package rahulshettyacademy.TestComponents;
 
+import java.io.File;
 import java.io.IOException;
-
+import org.apache.commons.io.FileUtils;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.testng.ITestContext;
 import org.testng.ITestListener;
 import org.testng.ITestResult;
-
 import com.aventstack.extentreports.ExtentReports;
 import com.aventstack.extentreports.ExtentTest;
 import com.aventstack.extentreports.Status;
-
 import rahulshettyacademy.resources.ExtentReporterNG;
 
-public class Listeners extends BaseTest implements ITestListener{
-	ExtentTest test;
-	ExtentReports extent = ExtentReporterNG.getReportObject();
-	ThreadLocal<ExtentTest> extentTest = new ThreadLocal<ExtentTest>(); //Thread safe
-	@Override
-	public void onTestStart(ITestResult result) {
-		// TODO Auto-generated method stub
-		test = extent.createTest(result.getMethod().getMethodName());
-		extentTest.set(test);//unique thread id(ErrorValidationTest)->test
-	}
+public class Listeners extends BaseTest implements ITestListener {
+    ExtentTest test;
+    ExtentReports extent = ExtentReporterNG.getReportObject(); // Initialize Extent Reports
+    ThreadLocal<ExtentTest> extentTest = new ThreadLocal<>(); // Ensures thread safety for parallel execution
 
-	@Override
-	public void onTestSuccess(ITestResult result) {
-		// TODO Auto-generated method stub
-		extentTest.get().log(Status.PASS, "Test Passed");
-		
-	}
+    @Override
+    public void onTestStart(ITestResult result) {
+        test = extent.createTest(result.getMethod().getMethodName()); // Create a new test entry
+        extentTest.set(test); // Store it in ThreadLocal to ensure correct logging in parallel execution
+    }
 
-	@Override
-	public void onTestFailure(ITestResult result) {
-		// TODO Auto-generated method stub
-		extentTest.get().fail(result.getThrowable());//
-		
-		try {
-			driver = (WebDriver) result.getTestClass().getRealClass().getField("driver")
-					.get(result.getInstance());
-			
-		} catch (Exception e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		
-		
-		
-		String filePath = null;
-		try {
-			
-			filePath = getScreenshot(result.getMethod().getMethodName(),driver);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		extentTest.get().addScreenCaptureFromPath(filePath, result.getMethod().getMethodName());
-		
-		
-		//Screenshot, Attach to report
-		
-		
-	}
+    @Override
+    public void onTestSuccess(ITestResult result) {
+        extentTest.get().log(Status.PASS, "Test Passed"); // Log test as passed
+    }
+
+    @Override
+    public void onTestFailure(ITestResult result) {
+        extentTest.get().fail(result.getThrowable()); // Log failure message
+
+        WebDriver driver = null;
+        try {
+            driver = (WebDriver) result.getTestClass().getRealClass().getField("driver").get(result.getInstance());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        String screenshotPath = null;
+        try {
+            screenshotPath = getScreenshot(result.getMethod().getMethodName(), driver);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        if (screenshotPath != null) {
+            extentTest.get().addScreenCaptureFromPath(screenshotPath, result.getMethod().getMethodName());
+        }
+    }
+
+    @Override
+    public void onFinish(ITestContext context) {
+        if (extent != null) {
+            extent.flush(); // Ensures index.html is updated
+            System.out.println("✅ Extent Report Flushed Successfully.");
+        }
+    }
+
+    // ✅ Save screenshots inside the timestamped report folder
+    public String getScreenshot(String testCaseName, WebDriver driver) throws IOException {
+        String reportFolder = ExtentReporterNG.getReportFolder();
+        String screenshotFolder = reportFolder + "/screenshots";
+
+        File folder = new File(screenshotFolder);
+        if (!folder.exists()) {
+            folder.mkdirs();
+        }
+
+        String screenshotPath = screenshotFolder + "/" + testCaseName + ".png";
+        File source = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
+        File destination = new File(screenshotPath);
+        FileUtils.copyFile(source, destination);
+
+        return screenshotPath.replace(System.getProperty("user.dir") + "/", ""); // Return relative path for GitHub Pages
+    }
 
 	@Override
 	public void onTestSkipped(ITestResult result) {
@@ -80,16 +96,4 @@ public class Listeners extends BaseTest implements ITestListener{
 		// TODO Auto-generated method stub
 		
 	}
-
-	@Override
-	public void onFinish(ITestContext context) {
-		// TODO Auto-generated method stub
-		extent.flush();
-		
-	}
-	
-	
-	
-	
-
 }
