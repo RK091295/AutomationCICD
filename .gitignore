@@ -1,12 +1,13 @@
-# Ignore everything in docs/
+# Ignore everything inside docs/
 docs/*
 
 # Allow subfolders inside docs/
 !docs/**/
 
-# Allow all reports inside subfolders
+# Allow only specific report files (index.html, screenshots, JSON, XML)
 !docs/*/index.html
 !docs/*/screenshots/
 !docs/*/screenshots/**
 !docs/*/*.json
 !docs/*/*.xml
+
