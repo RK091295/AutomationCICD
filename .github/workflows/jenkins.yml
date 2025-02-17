@@ -1,0 +1,13 @@
+name: Trigger Jenkins on Main Branch Only
+
+on:
+  push:
+    branches:
+      - main  # Only trigger Jenkins for main
+
+jobs:
+  trigger-jenkins:
+    runs-on: windows-latest  # Change to Windows environment
+    steps:
+      - name: Trigger Jenkins Job
+        run: curl -X POST "http://your-jenkins-url/job/your-job-name/build?token=your-token"
