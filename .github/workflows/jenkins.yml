@@ -4,10 +4,11 @@ on:
   push:
     branches:
       - main  # Only trigger Jenkins for main
-
 jobs:
   trigger-jenkins:
-    runs-on: windows-latest  # Change to Windows environment
+    runs-on: windows-latest
     steps:
       - name: Trigger Jenkins Job
-        run: curl -X POST "http://your-jenkins-url/job/your-job-name/build?token=your-token"
+        shell: powershell
+        run: Invoke-WebRequest -Uri "http://your-jenkins-url/job/your-job-name/build?token=your-token" -Method Post
+
