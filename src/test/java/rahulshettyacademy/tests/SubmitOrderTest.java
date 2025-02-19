@@ -51,7 +51,7 @@ public class SubmitOrderTest extends BaseTest{
 		checkoutPage.selectCountry("india");
 		ConfirmationPage confirmationPage = checkoutPage.submitOrder();
 		String confirmMessage = confirmationPage.getConfirmationMessage();
-		Assert.assertTrue(confirmMessage.equalsIgnoreCase("THANKYOU FOR THE ORDER."));
+		Assert.assertTrue(confirmMessage.equalsIgnoreCase("THANKYOU FOR THE ORDE."));
 		
 
 	}
@@ -156,7 +156,7 @@ public class SubmitOrderTest extends BaseTest{
 	//13
 	//14
 	//15
-	
+	//16
 	
 	
 }
