@@ -4,9 +4,9 @@ import org.testng.annotations.AfterMethod;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Paths;
 import java.time.Duration;
 import java.util.HashMap;
 import java.util.List;
@@ -21,7 +21,6 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
-import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -29,6 +28,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
 import rahulshettyacademy.pageobjects.LandingPage;
+import rahulshettyacademy.resources.ExtentReporterNG;
 
 public class BaseTest {
 
@@ -92,16 +92,24 @@ public class BaseTest {
 
 	}
 	
-	public String getScreenshot(String testCaseName,WebDriver driver) throws IOException
-	{
-		TakesScreenshot ts = (TakesScreenshot)driver;
-		File source = ts.getScreenshotAs(OutputType.FILE);
-		File file = new File(System.getProperty("user.dir") + "//docs//" + testCaseName + ".png");
-		FileUtils.copyFile(source, file);
-		return System.getProperty("user.dir") + "//docs//" + testCaseName + ".png";
-		
-		
+	public String getScreenshot(String testCaseName, WebDriver driver) throws IOException {
+	    String reportFolder = ExtentReporterNG.getReportFolder(); // Get the same report folder
+	    String screenshotPath = Paths.get(reportFolder, testCaseName + ".png").toString(); // Store screenshots in the same folder
+
+	    File source = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
+	    File destination = new File(screenshotPath);
+	    FileUtils.copyFile(source, destination);
+
+	    // Ensure relative path is correct for HTML reports
+	    String relativePath = new File(System.getProperty("user.dir")).toURI()
+	                            .relativize(new File(screenshotPath).toURI()).getPath();
+
+	    System.out.println("Screenshot saved at: " + screenshotPath);
+	    System.out.println("Relative path for report: " + relativePath);
+
+	    return relativePath;
 	}
+
 	
 	@BeforeMethod(alwaysRun=true)
 	public LandingPage launchApplication() throws IOException

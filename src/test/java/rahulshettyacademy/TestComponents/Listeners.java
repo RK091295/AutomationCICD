@@ -28,6 +28,7 @@ public class Listeners extends BaseTest implements ITestListener {
     @Override
     public void onTestSuccess(ITestResult result) {
         extentTest.get().log(Status.PASS, "Test Passed"); // Log test as passed
+        extent.flush(); // ✅ Force writing data immediately
     }
 
     @Override
@@ -49,8 +50,9 @@ public class Listeners extends BaseTest implements ITestListener {
         }
 
         if (screenshotPath != null) {
-            extentTest.get().addScreenCaptureFromPath(screenshotPath, result.getMethod().getMethodName());
+            extentTest.get().addScreenCaptureFromPath("./" + screenshotPath, result.getMethod().getMethodName());
         }
+        extent.flush(); // ✅ Ensure the report updates immediately
     }
 
     @Override
@@ -64,36 +66,22 @@ public class Listeners extends BaseTest implements ITestListener {
     // ✅ Save screenshots inside the timestamped report folder
     public String getScreenshot(String testCaseName, WebDriver driver) throws IOException {
         String reportFolder = ExtentReporterNG.getReportFolder();
-        String screenshotFolder = reportFolder + "/screenshots";
 
-        File folder = new File(screenshotFolder);
-        if (!folder.exists()) {
-            folder.mkdirs();
-        }
-
-        String screenshotPath = screenshotFolder + "/" + testCaseName + ".png";
+        String screenshotPath = reportFolder + "/" + testCaseName + ".png";
         File source = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
         File destination = new File(screenshotPath);
         FileUtils.copyFile(source, destination);
 
-        return screenshotPath.replace(System.getProperty("user.dir") + "/", ""); // Return relative path for GitHub Pages
+        return new File(screenshotPath).getName(); // Only return the filename
+
     }
 
-	@Override
-	public void onTestSkipped(ITestResult result) {
-		// TODO Auto-generated method stub
-		
-	}
+    @Override
+    public void onTestSkipped(ITestResult result) {}
 
-	@Override
-	public void onTestFailedButWithinSuccessPercentage(ITestResult result) {
-		// TODO Auto-generated method stub
-		
-	}
+    @Override
+    public void onTestFailedButWithinSuccessPercentage(ITestResult result) {}
 
-	@Override
-	public void onStart(ITestContext context) {
-		// TODO Auto-generated method stub
-		
-	}
+    @Override
+    public void onStart(ITestContext context) {}
 }

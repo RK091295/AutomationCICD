@@ -8,7 +8,7 @@ import java.util.Date;
 
 public class ExtentReporterNG {
 
-    private static String reportFolder; // Store folder path for screenshots
+    private static String reportFolder; // Store folder path for reports and screenshots
     private static ExtentReports extent; // Store ExtentReports instance
 
     public static ExtentReports getReportObject() {
@@ -18,17 +18,17 @@ public class ExtentReporterNG {
 
         // ✅ Generate timestamp for unique folder name
         String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        reportFolder = System.getProperty("user.dir") + "/docs/" + timestamp;
+        reportFolder = System.getProperty("user.dir") + "/reports/" + timestamp;
         String reportPath = reportFolder + "/index.html";
 
-        // ✅ Ensure the docs folder exists before creating timestamped folder
-        File docsFolder = new File(System.getProperty("user.dir") + "/docs");
-        if (!docsFolder.exists()) {
-            docsFolder.mkdirs();
-            System.out.println("📁 Created main docs folder.");
+        // ✅ Create the main reports folder if it doesn't exist
+        File mainReportsFolder = new File(System.getProperty("user.dir") + "/reports");
+        if (!mainReportsFolder.exists()) {
+            mainReportsFolder.mkdirs();
+            System.out.println("📁 Created main reports folder.");
         }
 
-        // ✅ Create new timestamped folder
+        // ✅ Create the timestamped folder for this test run
         File folder = new File(reportFolder);
         if (!folder.exists()) {
             folder.mkdirs();
